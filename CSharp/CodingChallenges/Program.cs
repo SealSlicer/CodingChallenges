@@ -16,7 +16,9 @@ namespace CodingChallenges
         {
             var test = "pie  is  a     delicious   food       awesome";
 
-            MakeLinesProblem.MakeLines(test, 4);
+//            MakeLinesProblem.MakeLines(test, 4);
+
+            new TreeTests().TestBst();
         }
 
         static void WriteWithComma(int value)

@@ -27,6 +27,34 @@
 
             return result;
         }
+
+        public bool InsertToFillTree(TValue valueToAdd)
+        {
+            var queue = new Queue<BinaryTreeNode<TValue>>();
+            queue.Enqueue(this);
+            var newNode = new BinaryTreeNode<TValue>(valueToAdd);
+            while (queue.Any())
+            {
+                var node = queue.Dequeue();
+
+                if (node.Left == null)
+                {
+                    node.Left = newNode;
+                    return true;
+                }
+
+                if (node.Right == null)
+                {
+                    node.Right = newNode;
+                    return true;
+                }
+
+                queue.Enqueue(node.Left);
+                queue.Enqueue(node.Right);
+            }
+
+            return false;
+        }
         
         public bool InsertValueCustom(TValue valueToAdd, Func<TValue, BinaryTreeNode<TValue>, BinaryTreeNode<TValue>> nextNodeOrInsert)
         {
@@ -131,9 +159,27 @@
             perNodeAction(this.Value);
         }
 
-        public bool ValidateIsStandardBst()
+        public bool ValidateIsStandardBst(TValue minValue, TValue maxValue)
         {
-            return this.ValidateBstNode(default(TValue), default(TValue));
+
+            bool resultSelfMin = this.Value.CompareTo(minValue) != (int)ComparisonResult.LessThan;
+                                 
+            bool resultSelfMax = this.Value.CompareTo(maxValue) != (int)ComparisonResult.GreaterThan;
+
+            bool resultLeft = true;
+            bool resultRight = true;
+
+            if (this.Right != null)
+            {
+                resultRight = this.Right.ValidateIsStandardBst(this.Value, maxValue);
+            }
+
+            if (this.Left != null)
+            {
+                resultLeft = this.Left.ValidateIsStandardBst(minValue, this.Value);
+            }
+
+            return resultSelfMin && resultSelfMax && resultRight && resultLeft;
         }
 
         private static BinaryTreeNode<TValue> NextNodeOrInsertStandardBst(TValue valueToAdd, BinaryTreeNode<TValue> currentNode)
@@ -165,27 +211,6 @@
 
             return nextNode;
         }
-
-        private bool ValidateBstNode(TValue min, TValue max)
-        {
-            bool resultSelfMin = min.Equals(default(TValue)) || this.Value.CompareTo(min) != (int)ComparisonResult.LessThan;
-
-            bool resultSelfMax = max.Equals(default(TValue)) || this.Value.CompareTo(max) != (int)ComparisonResult.GreaterThan;
-
-            bool resultLeft = true;
-            bool resultRight = true;
-           
-            if (this.Right != null)
-            {
-                resultRight = this.Right.ValidateBstNode(this.Value, max);
-            }
-
-            if (this.Left != null)
-            {
-                resultLeft = this.Left.ValidateBstNode(min, this.Value);
-            }
-
-            return resultSelfMin && resultSelfMax && resultRight && resultLeft;
-        }
+      
     }
 }
