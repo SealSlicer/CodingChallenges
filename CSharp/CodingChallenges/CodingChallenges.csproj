@@ -49,7 +49,7 @@
     <Compile Include="Trees\TreeTests.cs" />
     <Compile Include="Trees\TrieNode.cs" />
     <Compile Include="Utilities\Comparison\ComparisonExtensions.cs" />
-    <Compile Include="Utilities\ComparisonResult.cs" />
+    <Compile Include="Utilities\Comparison\ComparisonResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
